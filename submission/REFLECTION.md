@@ -1,11 +1,5 @@
 # Reflection — Day 20 Lab (Personal Report)
 
-> **Đây là báo cáo cá nhân.** Số liệu của bạn **không** so sánh được với bạn cùng lớp
-> — chỉ so **before vs after trên chính máy bạn**. Rubric chấm độ rõ ràng của setup,
-> đo lường và **lập luận**, không chấm tốc độ tuyệt đối.
->
-> `make verify` sẽ fail nếu còn placeholder chưa điền. Đó là cố ý.
-
 **Họ Tên:** Nguyễn Duy Phong
 **MSSV:** 2A202602834
 **Cohort:** K4
@@ -13,9 +7,7 @@
 
 ---
 
-## 1. Hardware & runtime  *(rubric 1, 2 — 10 điểm)*
-
-> Từ `make probe`. Paste output hoặc điền tay.
+## 1. Hardware & runtime
 
 - **OS:** Ubuntu trong WSL 2 trên Windows; hardware.json là probe WSL của lần chạy lại.
 - **CPU:** AMD Ryzen 7 7435HS
@@ -28,35 +20,27 @@
 - **Quantization:** UD-Q4_K_XL + UD-Q2_K_XL (từ `models/active.json`)
 
 **Chạy ở đâu:** laptop của tôi
-_(Nếu dùng cloud fallback: nói rõ vì sao — RAM < 8 GB, setup fail, v.v. Không mất điểm.)_
 
-**Setup story** (≤ 80 chữ): điều gì cần thay đổi để lab chạy trên máy bạn? Có bước
-nào fail rồi phải workaround không?
+**Setup:**
 
-Do Smart App Control trên Windows 11 chặn nạp DLL của server (mã lỗi 4551), tôi chuyển sang Ubuntu WSL 2. Lần kiểm tra lại dùng CPU-only (`LAB_N_GPU_LAYERS=0`), 8 threads, ctx 2048, 4 slots, cổng 8090. WSL được cấp 7.7 GB RAM nên probe khuyến nghị Qwen nhỏ hơn; tôi giữ Gemma đã tải và ghi nhận kết quả chạy thực tế.
+Windows chặn DLL của server nên tôi chuyển sang WSL 2. Tôi dùng CPU, 8 threads, ctx 2048 và 4 slots ở cổng 8090. WSL có 7.7 GB RAM; dù probe khuyên dùng Qwen nhỏ hơn, Gemma đã tải vẫn chạy được.
 
 ---
 
-## 2. Đo lường  *(rubric 3, 4, 5 — 20 điểm)*
-
-> Paste bảng từ `benchmarks/01-quickstart-results.md` (`make bench` tự sinh).
+## 2. Đo lường
 
 | Quantization | Size (GB) | Load (ms) | TTFT P50/P95 (ms) | TPOT P50/P95 (ms) | E2E P50/P95/P99 (ms) | Decode (tok/s) |
 |:--|--:|--:|--:|--:|--:|--:|
 | UD-Q4_K_XL | 2.97 | 53954 | 447 / 502 | 94.9 / 100.5 | 6353 / 6780 / 6780 | 10.5 |
 | UD-Q2_K_XL | 2.24 | 44838 | 484 / 568 | 64.5 / 69.6 | 4493 / 4797 / 4797 | 15.5 |
 
-**Quan sát** (≤ 60 chữ): 2-bit nhanh hơn bao nhiêu, và **có đáng không**? Bạn đã thử
-hỏi cùng một câu trên cả hai (`make serve` vs `.venv/bin/python labs/02-serve/serve.py --compare`)
-chưa? Chất lượng khác nhau thế nào?
+**Nhận xét:**
 
 2-bit decode nhanh 1.48×, nhỏ hơn 0.73 GiB. Với cùng prompt, Q4 giải thích sai tên TTFT/TPOT; Q2 bỏ hai chỉ số. Một câu hỏi chưa đủ so chất lượng. Tôi giữ 4-bit làm baseline serving và sẽ kiểm tra thêm trước khi đổi.
 
 ---
 
-## 3. Serving under load  *(rubric 8, 9, 10 — 20 điểm)*
-
-> Từ `benchmarks/02-server-results.md` (`make load-report`).
+## 3. Serving under load
 
 | Users | Reqs | RPS | P50 (ms) | P95 (ms) | P99 (ms) | Eff. concurrency | Failures |
 |:--|--:|--:|--:|--:|--:|--:|--:|
@@ -70,18 +54,13 @@ chưa? Chất lượng khác nhau thế nào?
 **Peak `llamacpp:n_busy_slots_per_decode`** (từ `make metrics` khi `make load-50` đang
 chạy): 4.00 / 4 slots (peak của trung bình mỗi decode step)
 
-**Saturation reading** (≤ 80 chữ): server của bạn bão hoà ở đâu, và **bằng chứng nào**
-thuyết phục bạn? Nếu P95 tăng nhanh hơn RPS thì phần latency thêm đó là queue time hay
-compute time — bạn biết bằng cách nào? Nếu bạn phải nâng goodput@SLO, bạn sẽ đổi knob
-nào **trước**, và vì sao knob đó?
+**Nhận xét:**
 
 Tải tăng 5×, RPS tăng 1.00×; P95 thay đổi 1.85×. Concurrency 10.0, peak deferred 46 cho thấy có queue. Mẫu hoàn tất ít, chưa xác định chính xác ngưỡng bão hòa. Tôi sẽ thử giảm TPOT bằng quant nhỏ hơn hoặc GPU offload; chưa đo hiệu quả.
 
 ---
 
-## 4. Integration  *(rubric 12, 13 — 15 điểm)*
-
-> Từ `make pipeline`. Nói thật cái nào real, cái nào stub — stub **không** mất điểm.
+## 4. Integration
 
 | Day | Piece | Real hay stub? |
 |---|---|---|
@@ -98,18 +77,13 @@ Tải tăng 5×, RPS tăng 1.00×; P95 thay đổi 1.85×. Concurrency 10.0, pea
 - llm: 4843.1 ms
 - **stage chiếm nhiều nhất:** llm (100% của total)
 
-**Reflection** (≤ 60 chữ): bottleneck ở đâu? Có khớp với kỳ vọng của bạn không? Nếu
-phải giảm latency của pipeline này 2×, bạn sẽ tấn công vào đâu?
+**Nhận xét:**
 
 LLM chiếm gần toàn bộ latency của pipeline toy. Tôi sẽ đo thử caching trên prefix trùng và GPU offload; chưa chứng minh giảm 2×. Retrieval đang stub nên kết quả không đại diện cho RAG có embedding/vector database thật.
 
 ---
 
-## 5. The single change that mattered most  *(rubric 11 — 10 điểm)*
-
-> **Phần quan trọng nhất của report.** Không cần bonus track: `make tune` đã cho bạn
-> một before/after thật (`benchmarks/01-tuning-tg128.md`). Đổi quantization,
-> `LAB_N_CTX`, hay `--parallel` rồi đo lại cũng được.
+## 5. The single change that mattered most
 
 **Change:** Đổi từ UD-Q4_K_XL sang UD-Q2_K_XL trong benchmark; serving vẫn dùng 4-bit.
 
@@ -119,38 +93,17 @@ after:   15.5 tok/s (UD-Q2_K_XL, 8 threads)
 speedup: 1.48×
 ```
 
-**Tại sao nó work** (1–2 đoạn — đây là phần grader đọc kỹ nhất):
+**Giải thích:**
 
-Giả thuyết của tôi vẫn là decode chịu giới hạn băng thông bộ nhớ. Bản 2-bit nhỏ hơn 0.73 GiB và có TPOT P50 thấp hơn (64.49 so với 94.94 ms). Giảm dữ liệu trọng số phải đọc có thể giải thích tốc độ cao hơn; bài đo không có bộ đếm bandwidth/cache để chứng minh riêng cơ chế này.
+Đổi sang 2-bit giúp decode tăng từ 10.5 lên 15.5 tok/s. Model nhỏ hơn 0.73 GiB, TPOT giảm từ 94.94 xuống 64.49 ms. Tôi cho rằng ít dữ liệu trọng số phải đọc từ RAM góp phần làm decode nhanh hơn, nhưng chưa đo bandwidth để xác nhận.
 
-Tranh chấp bộ nhớ/cache và chi phí đồng bộ vẫn là giả thuyết cho đường cong threads. Lần sweep mới tốt nhất ở 8 threads; tăng so với baseline 8 threads là 1.00×, nhỏ hơn mức đổi quantization. Vì vậy tôi chọn quantization làm thay đổi có tác động lớn nhất đã đo. Chưa đo tăng RPS serving hoặc kiểm định chất lượng trên một tập câu hỏi đủ lớn.
-
----
-
-## 6. Bonus  *(optional — tối đa 10 điểm)*
-
-> Bỏ trống nếu không làm. Xem `docs/bonus/README.md`. Đừng làm hết — **một** finding sâu
-> ăn điểm hơn năm bảng nông.
-
-**Đã làm:** Không làm bonus; thread tuning thuộc base track.
-
-**Numbers:**
-
-```
-Không có kết quả bonus.
-```
-
-**Điều này nói lên gì mà deck chưa nói:**
-
-_(để trống nếu bạn không làm phần này)_
+Tuning không cải thiện baseline: 8 threads vẫn tốt nhất ở 12.15 tok/s; 32 threads chỉ còn 1.20 tok/s. Thêm threads có thể làm tăng tranh chấp bộ nhớ và chi phí đồng bộ. Vì vậy, đổi quantization là thay đổi có tác động rõ nhất trong các phép đo của tôi.
 
 ---
 
-## 7. Điều làm bạn ngạc nhiên nhất  *(optional)*
+## 6. Bonus
 
-_(1–2 câu. Không bắt buộc, nhưng grader đọc hết.)_
-
-_(để trống nếu bạn không làm phần này)_
+Không làm bonus; tuning thuộc base track.
 
 ---
 
@@ -173,12 +126,9 @@ _(để trống nếu bạn không làm phần này)_
 - [ ] Đã push và paste public URL vào VinUni LMS **trước 23:59 (UTC+7) ngày làm lab**
 - [x] **Không** commit `models/*.gguf`, `runtime/` hay `.env` (đã có trong `.gitignore`)
 
-**Quan trọng:** repo phải **public** đến khi điểm được công bố. Private → grader không
-xem được → 0 điểm.
-
 ---
 
 ## 9. Khai báo sử dụng AI  *(xem `docs/RULES.md` §3)*
 
 - Công cụ: Antigravity AI Assistant; OpenAI Codex.
-- Mục đích: Hỗ trợ xử lý lỗi môi trường, kiểm tra repo, chạy lại benchmark/load test/pipeline, sửa đường dẫn đa nền tảng và lỗi kết luận trong load-report, đồng bộ số liệu và làm rõ giới hạn bằng chứng. Codex thay ảnh terminal dựng sẵn bằng ảnh chụp trình duyệt hiển thị log thực, có gắn nhãn nguồn. Phần giải thích cơ chế giữ giả thuyết đã có và bỏ các khẳng định chưa đo được.
+- Mục đích: Hỗ trợ xử lý lỗi, chạy các phép đo, đối chiếu số liệu và rút gọn báo cáo. Ảnh là ảnh chụp trang hiển thị log thật, có ghi rõ nguồn; không phải ảnh terminal. Giải thích về bandwidth/cache là giả thuyết, chưa được đo trực tiếp.

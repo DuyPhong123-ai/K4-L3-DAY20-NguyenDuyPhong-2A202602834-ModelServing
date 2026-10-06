@@ -30,6 +30,6 @@ Dominant stage: **llm** (100% of total)
 
 ## Which N16-N19 pieces are real
 
-N16 Cloud/IaC: stub, không triển khai cloud. N17 Data pipeline: stub, TOY_DOCS. N18 Lakehouse: stub, danh sách in-memory. N19 Vector + features: stub, keyword overlap, không dùng embedding model/vector database. N20 Serving: real, HTTP tới llama-server.
+N16–N19 đều stub: không triển khai cloud, dùng TOY_DOCS in-memory và keyword overlap, không có embedding/vector DB thật. N20 serving là thật, gọi HTTP tới llama-server.
 
-Mean: embed 0.0 ms, retrieve 0.1 ms, llm 4843.1 ms, total 4843.3 ms. LLM chiếm gần toàn bộ thời gian trong pipeline toy này; không khái quát sang RAG có retrieval thật. Ưu tiên đo thử GPU offload hoặc caching trên prefix thực sự trùng nhau. Chưa đo mức giảm 2×; streaming cải thiện thời gian nhìn thấy token đầu tiên, không giảm thời gian hoàn tất.
+Cả 3 query chạy xong. LLM mất trung bình 4843.1 ms, gần toàn bộ 4843.3 ms tổng latency. Tôi sẽ thử caching trên prefix trùng hoặc GPU offload; chưa đo được giảm 2×. Kết quả này chỉ áp dụng cho pipeline toy.

@@ -19,4 +19,4 @@ genuinely packing concurrent requests into shared decode steps.
 
 ## Your observation
 
-Peak của trung bình busy slots/decode là 4.00/4, processing peak 4, deferred peak 46. Gauge busy > 1 là bằng chứng gom nhiều request vào decode. Effective concurrency 10.0 tính từ request hoàn tất bao gồm thời gian chờ; khác với trung bình slot bận mỗi bước decode. Không gọi tỷ lệ này là mức sử dụng CPU/GPU hay batch width tức thời. Raw samples nằm trong CSV; metrics chạy chồng với load-50.
+Busy slots đạt gần 4/4, processing đạt 4 và deferred đạt 46: server gom nhiều request vào decode và có request phải chờ. Concurrency 10.0 tính cả thời gian chờ, nên khác với số slot đang decode. Các peak có thể xảy ra ở thời điểm khác nhau; gauge không cho biết chính xác queue time trong P95.

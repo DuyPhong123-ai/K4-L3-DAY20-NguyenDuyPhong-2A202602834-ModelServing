@@ -23,6 +23,4 @@ LAB_N_THREADS=8 make bench
 
 ## Your explanation
 
-Sweep đo tg128; cấu hình tốt nhất trong grid là 8 threads (12.15 tok/s), so với baseline 8 threads (12.15 tok/s): 1.00×.
-
-Giả thuyết đã ghi trong REFLECTION là giới hạn bandwidth, tranh chấp cache và chi phí đồng bộ. Đây là các cơ chế có thể giải thích đường cong; chưa có hardware counters để phân biệt chúng. Không suy ra băng thông DDR5 bão hòa hoàn toàn hoặc mức tăng RPS serving từ sweep decode đơn lẻ. Log nguyên bản ở submission/logs/tune.txt.
+8 threads tốt nhất: 12.15 tok/s, gần với 11.86 tok/s ở 4 threads. Tăng lên 16 và 32 threads làm tốc độ giảm còn 3.28 và 1.20 tok/s. Tôi nghĩ tranh chấp bộ nhớ và chi phí đồng bộ góp phần gây giảm tốc, nhưng chưa đo trực tiếp. Tuning không cải thiện baseline 8 threads.

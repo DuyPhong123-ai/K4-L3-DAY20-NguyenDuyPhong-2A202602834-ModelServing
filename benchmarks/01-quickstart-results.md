@@ -16,7 +16,7 @@ Completed requests: `UD-Q4_K_XL` 10/10 · `UD-Q2_K_XL` 10/10
 
 ## Your observation
 
-Lần chạy lại CPU-only, 8 threads: UD-Q4_K_XL đạt 10.5 tok/s, UD-Q2_K_XL đạt 15.5 tok/s (tỷ lệ compare/primary 1.48×). TPOT P50 lần lượt 94.94 và 64.49 ms; bản compare nhỏ hơn 0.73 GiB. Kết quả phù hợp với giả thuyết decode chịu ảnh hưởng của lưu lượng bộ nhớ, nhưng không đo trực tiếp bandwidth hoặc chi phí dequantization. Đã thử cùng prompt ở cả hai quantization; transcript bên dưới. Một câu hỏi chưa đủ kết luận chất lượng suy giảm. Giữ 4-bit cho serving theo lựa chọn đã ghi trong REFLECTION; cần kiểm tra chất lượng trước khi đổi.
+2-bit decode nhanh hơn 1.48× và nhỏ hơn 0.73 GiB. Tôi thấy đáng cân nhắc nếu ưu tiên tốc độ trên CPU. Tuy nhiên, cùng một câu hỏi, Q4 giải thích sai tên TTFT/TPOT còn Q2 bỏ hai chỉ số. Một ví dụ chưa đủ kết luận bản nào tốt hơn; serving vẫn dùng Q4 làm baseline.
 
 ## Same-prompt quality check
 

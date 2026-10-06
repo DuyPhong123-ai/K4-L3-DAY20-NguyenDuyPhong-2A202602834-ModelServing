@@ -25,8 +25,7 @@ utilisation. For true slot utilisation use the server's own gauges (`make metric
 
 **Saturated.** Throughput delivered only 1.00x for 5x the offered load, and effective concurrency (10.0) is at or above all 4 decode slots. These are saturation signals at the tested load. Two short runs do not locate the exact saturation threshold or separate queue time from compute time; corroborate queueing with the server's deferred-request gauges.
 
-Throughput moved 1.00x while P95 moved 1.85x. That gap is the goodput argument: past saturation you buy throughput by spending latency, and if your SLO is a P95 target then the requests you added are no longer being served within it. (This lab does not fix an SLO number for you -- pick one in your write-up and state how much goodput you keep at it.)
 
 ## Your reading
 
-Tải mô phỏng tăng 5×, RPS tăng 1.00×; P95 thay đổi 1.85×. Effective concurrency ở 50 users là 10.0, so với 4 slots. Server ghi nhận peak trung bình busy slots/decode 4.00/4 và peak deferred 46. Hai peak có thể ở các thời điểm khác nhau. Request phải xếp hàng khi deferred > 0; không suy ra ranh giới bão hòa chính xác chỉ từ hai mức tải. Chỉ có 23 và 23 request hoàn tất; percentile chưa phản ánh các request còn chờ lúc dừng. Theo lựa chọn đã ghi trong REFLECTION, hướng thử tiếp là giảm TPOT bằng quant nhỏ hơn hoặc GPU offload sau khi xác minh runtime thấy GPU. Chưa đo goodput@SLO riêng.
+Tăng từ 10 lên 50 users, RPS gần như giữ nguyên (0.37 và 0.36), còn P95 tăng từ 34 lên 63 giây. Cùng với 4 slot bận và 46 request deferred, đây là dấu hiệu bão hòa. Mỗi lượt chỉ hoàn tất 23 request nên chưa xác định chính xác ngưỡng bão hòa. Tôi sẽ thử giảm TPOT bằng quant nhỏ hơn trước; GPU offload cần kiểm tra runtime thấy GPU.
