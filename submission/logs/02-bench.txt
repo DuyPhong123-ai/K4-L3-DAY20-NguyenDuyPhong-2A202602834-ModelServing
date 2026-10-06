@@ -1,0 +1,66 @@
+Captured at: 2026-10-06T16:22:24.006976+00:00
+Command: /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/.venv/bin/python labs/01-measure/benchmark.py
+Environment: threads=8 ngl=0 ctx=2048 parallel=4 port=8090
+
+
+────────────────────────────────────────────────────────────────
+  primary  (UD-Q4_K_XL)
+────────────────────────────────────────────────────────────────
+  model     : gemma-4-E2B-it-UD-Q4_K_XL.gguf
+  threads   : 8   ngl: 0   ctx: 2048   max_tokens: 64
+  starting llama-server ...
+  ready in 53954 ms (model load + warm-up of the HTTP stack)
+   [ 1/10] ttft=  463.3ms  tpot= 97.2ms  e2e=  6589.9ms  out=64
+   [ 2/10] ttft=  456.9ms  tpot= 99.4ms  e2e=  2346.2ms  out=20
+   [ 3/10] ttft=  447.1ms  tpot=100.5ms  e2e=  6780.5ms  out=64
+   [ 4/10] ttft=  481.2ms  tpot= 93.2ms  e2e=  6353.4ms  out=64
+   [ 5/10] ttft=  419.6ms  tpot= 95.0ms  e2e=  6403.1ms  out=64
+   [ 6/10] ttft=  359.4ms  tpot= 83.3ms  e2e=  5606.6ms  out=64
+   [ 7/10] ttft=  342.5ms  tpot= 99.5ms  e2e=  6613.9ms  out=64
+   [ 8/10] ttft=  453.1ms  tpot= 94.9ms  e2e=  6434.2ms  out=64
+   [ 9/10] ttft=  501.7ms  tpot= 94.0ms  e2e=  5011.6ms  out=49
+   [10/10] ttft=  363.8ms  tpot= 91.3ms  e2e=  6117.4ms  out=64
+
+────────────────────────────────────────────────────────────────
+  compare  (UD-Q2_K_XL)
+────────────────────────────────────────────────────────────────
+  model     : gemma-4-E2B-it-UD-Q2_K_XL.gguf
+  threads   : 8   ngl: 0   ctx: 2048   max_tokens: 64
+  starting llama-server ...
+  ready in 44838 ms (model load + warm-up of the HTTP stack)
+   [ 1/10] ttft=  567.6ms  tpot= 64.5ms  e2e=  4437.1ms  out=61
+   [ 2/10] ttft=  435.2ms  tpot= 63.3ms  e2e=  1638.9ms  out=20
+   [ 3/10] ttft=  513.5ms  tpot= 63.2ms  e2e=  4492.8ms  out=64
+   [ 4/10] ttft=  501.0ms  tpot= 66.3ms  e2e=  4678.6ms  out=64
+   [ 5/10] ttft=  525.8ms  tpot= 66.4ms  e2e=  4706.1ms  out=64
+   [ 6/10] ttft=  483.6ms  tpot= 63.4ms  e2e=  4480.3ms  out=64
+   [ 7/10] ttft=  452.5ms  tpot= 66.6ms  e2e=  4650.1ms  out=64
+   [ 8/10] ttft=  412.2ms  tpot= 69.6ms  e2e=  4796.6ms  out=64
+   [ 9/10] ttft=  387.8ms  tpot= 64.6ms  e2e=  3167.4ms  out=44
+   [10/10] ttft=  521.6ms  tpot= 64.4ms  e2e=  4577.8ms  out=64
+
+# 01 - Measure: latency baseline
+
+Model `Gemma 4 E2B` · host `Linux-x86_64` · llama.cpp `b10488`
+Settings: `threads=8` `ngl=0` `ctx=2048`
+`max_tokens=64` · warm-up discarded
+Completed requests: `UD-Q4_K_XL` 10/10 · `UD-Q2_K_XL` 10/10
+
+| Quantization | Size (GB) | Load (ms) | TTFT P50/P95 (ms) | TPOT P50/P95 (ms) | E2E P50/P95/P99 (ms) | Decode (tok/s) |
+|:--|--:|--:|--:|--:|--:|--:|
+| UD-Q4_K_XL | 2.97 | 53954 | 447 / 502 | 94.9 / 100.5 | 6353 / 6780 / 6780 | 10.5 |
+| UD-Q2_K_XL | 2.24 | 44838 | 484 / 568 | 64.5 / 69.6 | 4493 / 4797 / 4797 | 15.5 |
+
+- **TTFT** = prefill. Short prompts keep it small; long-context RAG is where it explodes.
+- **TPOT** = per-output-token decode cost, bounded by memory bandwidth. `decode tok/s = 1000 / TPOT_p50`.
+- `UD-Q2_K_XL` decodes **1.48x faster** than `UD-Q4_K_XL` here, for 0.73 GB less on disk.
+
+## Your observation (required -- replace this line)
+
+_Is the smaller quantization worth it on your machine? Compare the numbers above,
+then judge the answer quality yourself: run `make serve` on each and ask the same
+question twice. Size and speed are measurable; usefulness is your call._
+
+==> Wrote benchmarks/01-quickstart-results.md
+
+Exit code: 0

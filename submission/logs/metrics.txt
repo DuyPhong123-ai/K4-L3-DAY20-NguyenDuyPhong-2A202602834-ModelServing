@@ -1,0 +1,40 @@
+
+────────────────────────────────────────────────────────────────
+  Recording http://localhost:8090/metrics for 60s
+────────────────────────────────────────────────────────────────
+  Drive load in another terminal (make load-50) or these will all read idle.
+
+   busy_slots= 0.00  processing=  0  deferred=  0  tok_pred=       0
+   busy_slots= 0.00  processing=  0  deferred=  0  tok_pred=       0
+   busy_slots= 0.00  processing=  0  deferred=  0  tok_pred=       0
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=       0
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=       0
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=      37
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     172
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     172
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     206
+   busy_slots= 4.00  processing=  4  deferred= 44  tok_pred=     350
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     350
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     398
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     446
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     542
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     542
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     542
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     590
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     590
+   busy_slots= 4.00  processing=  4  deferred= 44  tok_pred=     674
+   busy_slots= 4.00  processing=  4  deferred= 44  tok_pred=     674
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     674
+   busy_slots= 4.00  processing=  4  deferred= 44  tok_pred=     755
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     755
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     803
+   busy_slots= 4.00  processing=  4  deferred= 46  tok_pred=     803
+   busy_slots= 4.00  processing=  4  deferred= 44  tok_pred=     908
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     908
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     908
+   busy_slots= 4.00  processing=  4  deferred= 45  tok_pred=     993
+
+==> Wrote benchmarks/02-server-metrics-u50.csv
+==> Wrote benchmarks/02-server-batching-u50.md
+
+  Highest sampled n_busy_slots_per_decode = 4.00 of 4 slots

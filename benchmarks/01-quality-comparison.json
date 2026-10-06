@@ -1,0 +1,96 @@
+{
+  "request": {
+    "model": "local",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Explain in two sentences how goodput@SLO differs from raw throughput. Mention TTFT and TPOT targets."
+      }
+    ],
+    "max_tokens": 96,
+    "temperature": 0,
+    "seed": 42
+  },
+  "results": [
+    {
+      "quant": "UD-Q4_K_XL",
+      "model_file": "gemma-4-E2B-it-UD-Q4_K_XL.gguf",
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Goodput@SLO measures the actual data delivered to the user within a specific Service Level Objective (SLO), whereas raw throughput is the total volume of data processed. Goodput@SLO is often evaluated in the context of latency targets like Time to First Byte (TTFT) and Time to Process (TPOT) to ensure both speed and data delivery meet service expectations."
+            }
+          }
+        ],
+        "created": 1791305347,
+        "model": "/mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/models/gemma-4-E2B-it-UD-Q4_K_XL.gguf",
+        "system_fingerprint": "b10488-9d77fa172",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 77,
+          "prompt_tokens": 32,
+          "total_tokens": 109,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-V0nsqfjfD918QUgozySkHhHvHrgMQWNn",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 32,
+          "prompt_ms": 849.144,
+          "prompt_per_token_ms": 26.53575,
+          "prompt_per_second": 37.685009845208825,
+          "predicted_n": 77,
+          "predicted_ms": 8599.567,
+          "predicted_per_token_ms": 113.15219736842104,
+          "predicted_per_second": 8.83765426794163
+        }
+      }
+    },
+    {
+      "quant": "UD-Q2_K_XL",
+      "model_file": "gemma-4-E2B-it-UD-Q2_K_XL.gguf",
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Goodput@SLO measures the *effective* throughput achieved by a system under specific Service Level Objectives (SLOs), focusing on the quality and reliability of the delivered service. Raw throughput, on the other hand, is a more fundamental metric measuring the sheer volume of data processed or transferred, irrespective of service quality."
+            }
+          }
+        ],
+        "created": 1791305402,
+        "model": "/mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/models/gemma-4-E2B-it-UD-Q2_K_XL.gguf",
+        "system_fingerprint": "b10488-9d77fa172",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 32,
+          "total_tokens": 96,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-sOlrU1k6q0Ddev2XuosLhmGF54zMJ3Ug",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 32,
+          "prompt_ms": 874.701,
+          "prompt_per_token_ms": 27.33440625,
+          "prompt_per_second": 36.58392982287662,
+          "predicted_n": 64,
+          "predicted_ms": 4368.177,
+          "predicted_per_token_ms": 69.33614285714285,
+          "predicted_per_second": 14.422492495153014
+        }
+      }
+    }
+  ]
+}

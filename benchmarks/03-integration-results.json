@@ -3,13 +3,13 @@
   "mean_ms": {
     "embed": 0.0,
     "retrieve": 0.1,
-    "llm": 4658.8,
-    "total": 4659.0
+    "llm": 4843.1,
+    "total": 4843.3
   },
   "results": [
     {
       "query": "Why is goodput more useful than raw throughput?",
-      "answer": "Goodput@SLO counts only the requests per second that met the TTFT and TPOT targets.",
+      "answer": "Goodput@SLO counts only the requests per second that met the TTFT and TPOT targets. Throughput at saturation ignores SLOs.",
       "contexts": [
         {
           "id": "goodput",
@@ -28,19 +28,19 @@
       "timings_ms": {
         "embed": 0.0,
         "retrieve": 0.1,
-        "llm": 5462.5,
-        "total": 5462.7
+        "llm": 6293.4,
+        "total": 6293.6
       },
       "server_timings": {
-        "prompt_n": 149,
-        "prompt_ms": 3230.669,
-        "predicted_n": 22,
-        "predicted_ms": 1600.997
+        "prompt_n": 150,
+        "prompt_ms": 2248.67,
+        "predicted_n": 30,
+        "predicted_ms": 3119.062
       }
     },
     {
       "query": "What problem does PagedAttention actually solve?",
-      "answer": "PagedAttention stores the KV cache in non-contiguous pages, removing the internal fragmentation that wasted most GPU memory.",
+      "answer": "PagedAttention stores the KV cache in non-contiguous pages, which removes the internal fragmentation that wasted most GPU memory.",
       "contexts": [
         {
           "id": "paged",
@@ -59,14 +59,14 @@
       "timings_ms": {
         "embed": 0.0,
         "retrieve": 0.1,
-        "llm": 4242.1,
-        "total": 4242.3
+        "llm": 4411.5,
+        "total": 4411.7
       },
       "server_timings": {
         "prompt_n": 114,
-        "prompt_ms": 2508.45,
-        "predicted_n": 23,
-        "predicted_ms": 1692.37
+        "prompt_ms": 2022.211,
+        "predicted_n": 24,
+        "predicted_ms": 2315.613
       }
     },
     {
@@ -89,15 +89,15 @@
       "embed_backend": "keyword overlap",
       "timings_ms": {
         "embed": 0.0,
-        "retrieve": 0.0,
-        "llm": 4271.8,
-        "total": 4271.9
+        "retrieve": 0.1,
+        "llm": 3824.5,
+        "total": 3824.6
       },
       "server_timings": {
         "prompt_n": 113,
-        "prompt_ms": 2472.821,
+        "prompt_ms": 1801.8,
         "predicted_n": 24,
-        "predicted_ms": 1749.255
+        "predicted_ms": 1964.95
       }
     }
   ]

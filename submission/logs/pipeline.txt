@@ -1,0 +1,36 @@
+Captured at: 2026-10-06T16:36:43.758170+00:00
+Command: /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/.venv/bin/python labs/03-integrate/pipeline.py
+Environment: threads=8 ngl=0 ctx=2048 parallel=4 port=8090
+
+
+────────────────────────────────────────────────────────────────
+  03 - RAG pipeline
+────────────────────────────────────────────────────────────────
+  llama-server : http://localhost:8090
+  embeddings   : none (keyword overlap fallback)
+
+=== Why is goodput more useful than raw throughput?
+  contexts : [('goodput', 1.0), ('paged', 0.0), ('radix', 0.0)]
+  timings  : {'embed': 0.0, 'retrieve': 0.1, 'llm': 6293.4, 'total': 6293.6}
+  server   : prefill 150 tok / 2249 ms, decode 30 tok / 3119 ms
+  answer   : Goodput@SLO counts only the requests per second that met the TTFT and TPOT targets. Throughput at saturation ignores SLOs.
+
+=== What problem does PagedAttention actually solve?
+  contexts : [('paged', 1.0), ('radix', 0.0), ('disagg', 0.0)]
+  timings  : {'embed': 0.0, 'retrieve': 0.1, 'llm': 4411.5, 'total': 4411.7}
+  server   : prefill 114 tok / 2022 ms, decode 24 tok / 2316 ms
+  answer   : PagedAttention stores the KV cache in non-contiguous pages, which removes the internal fragmentation that wasted most GPU memory.
+
+=== When does splitting prefill and decode help?
+  contexts : [('disagg', 2.0), ('radix', 1.0), ('batching', 1.0)]
+  timings  : {'embed': 0.0, 'retrieve': 0.1, 'llm': 3824.5, 'total': 3824.6}
+  server   : prefill 113 tok / 1802 ms, decode 24 tok / 1965 ms
+  answer   : Splitting prefill and decode helps because prefill is compute-bound and decode is memory-bandwidth-bound.
+
+  Mean over 3 queries (ms): {'embed': 0.0, 'retrieve': 0.1, 'llm': 4843.1, 'total': 4843.3}
+  Dominant stage: llm (100% of total)
+
+==> Wrote benchmarks/03-integration-results.md
+  Put these numbers in REFLECTION.md section 4 as well.
+
+Exit code: 0

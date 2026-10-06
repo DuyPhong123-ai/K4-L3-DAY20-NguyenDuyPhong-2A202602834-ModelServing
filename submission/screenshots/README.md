@@ -1,5 +1,32 @@
 # Screenshots
 
+## Evidence in this submission
+
+The five PNGs are browser screenshots of explicitly labelled pages displaying
+verbatim output from commands run locally in WSL2. They are **not terminal
+screenshots**. Original logs are in `submission/logs/`; the HTML viewer pages are
+in `submission/evidence/`. No request counts, timings, responses, or timestamps
+are invented by the screenshot generator. The earlier terminal mockups have been
+replaced. If the grader requires the terminal UI specifically, capture the same
+commands in a terminal rather than representing these browser captures as such.
+
+Reproduce: `wsl -d Ubuntu -- .venv/bin/python scripts/run_evidence.py`, then run
+`python scripts/sync_submission.py` and `python scripts/generate_screenshots.py`.
+The additional same-prompt comparison is run with
+`wsl -d Ubuntu -- .venv/bin/python scripts/run_evidence.py --quality-only`.
+Capture the HTML pages with `scripts/capture_evidence.cjs` (requires Playwright and
+an installed Chrome; `EVIDENCE_BROWSER` overrides the executable path).
+
+Browser capture commands used on Windows:
+
+```powershell
+npm install --prefix "$env:TEMP/day20-evidence-tools" playwright --no-audit --no-fund
+$env:NODE_PATH = "$env:TEMP/day20-evidence-tools/node_modules"
+node scripts/capture_evidence.cjs
+```
+
+The original assignment instructions follow below.
+
 **5 required.** All five come from the core path — none need bonus work, a GPU, or a
 compiler. `make verify` counts files here and fails below 5.
 

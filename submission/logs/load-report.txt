@@ -1,3 +1,8 @@
+Captured at: 2026-10-06T16:35:38.351840+00:00
+Command: /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/.venv/bin/python labs/02-serve/load-report.py
+Environment: threads=8 ngl=0 ctx=2048 parallel=4 port=8090
+
+
 # 02 - Serve: load test + saturation reading
 
 Host `Linux-x86_64` · llama.cpp `b10488` ·
@@ -23,10 +28,16 @@ utilisation. For true slot utilisation use the server's own gauges (`make metric
 | P95 latency | **1.85x** |
 | Effective concurrency at 50 users | 10.0 vs `--parallel 4` slots (occupancy/slot ratio 2.50) |
 
-**Saturated.** Throughput delivered only 1.00x for 5x the offered load, and effective concurrency (10.0) is at or above all 4 decode slots. These are saturation signals at the tested load. Two short runs do not locate the exact saturation threshold or separate queue time from compute time; corroborate queueing with the server's deferred-request gauges.
+**Saturated.** Throughput delivered only 1.00x for 5x the offered load, and effective concurrency (10.0) is at or above all 4 decode slots. Saturation sets in somewhere at or below 50 users; the load you added beyond that point became queue time rather than throughput.
 
 Throughput moved 1.00x while P95 moved 1.85x. That gap is the goodput argument: past saturation you buy throughput by spending latency, and if your SLO is a P95 target then the requests you added are no longer being served within it. (This lab does not fix an SLO number for you -- pick one in your write-up and state how much goodput you keep at it.)
 
-## Your reading
+## Your reading (required -- replace this line)
 
-Tải mô phỏng tăng 5×, RPS tăng 1.00×; P95 thay đổi 1.85×. Effective concurrency ở 50 users là 10.0, so với 4 slots. Server ghi nhận peak trung bình busy slots/decode 4.00/4 và peak deferred 46. Hai peak có thể ở các thời điểm khác nhau. Request phải xếp hàng khi deferred > 0; không suy ra ranh giới bão hòa chính xác chỉ từ hai mức tải. Chỉ có 23 và 23 request hoàn tất; percentile chưa phản ánh các request còn chờ lúc dừng. Theo lựa chọn đã ghi trong REFLECTION, hướng thử tiếp là giảm TPOT bằng quant nhỏ hơn hoặc GPU offload sau khi xác minh runtime thấy GPU. Chưa đo goodput@SLO riêng.
+_Where does your server saturate, and what is the evidence? Name the number that
+convinced you. Then say what you would change first to raise goodput at your SLO --
+and why that knob and not another._
+
+==> Wrote benchmarks/02-server-results.md
+
+Exit code: 0

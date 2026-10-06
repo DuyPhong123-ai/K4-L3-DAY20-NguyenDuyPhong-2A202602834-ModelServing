@@ -12,8 +12,28 @@ from __future__ import annotations
 
 import os
 import random
+import csv
+from pathlib import Path
 
-from locust import HttpUser, between, task
+from locust import HttpUser, between, task, events
+from locust.stats import StatsCSV, PERCENTILES_TO_REPORT
+
+
+@events.init.add_listener
+def export_final_stats(environment, **kwargs):
+    """Preserve the same final stats printed after all users stop.
+
+    Locust's periodic CSV can lag the shutdown summary by one or more requests.
+    Write a separate final file, since its periodic writer still owns _stats.csv.
+    """
+    @environment.events.quit.add_listener
+    def on_quit(**kwargs):
+        prefix = os.environ.get('LAB_FINAL_CSV') or getattr(environment.parsed_options, 'csv_prefix', None)
+        if prefix:
+            target = Path(str(prefix) + '_final_stats.csv')
+            with target.open('w', encoding='utf-8', newline='') as output:
+                StatsCSV(environment, PERCENTILES_TO_REPORT).requests_csv(csv.writer(output))
+            print(f'Final shutdown statistics saved: {target}', flush=True)
 
 # Output length drives how long each request occupies a decode slot, which drives how
 # many requests a 60s run can finish. These defaults are sized so that even a

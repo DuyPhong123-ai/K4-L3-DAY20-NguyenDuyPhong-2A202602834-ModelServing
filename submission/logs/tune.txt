@@ -1,0 +1,53 @@
+Captured at: 2026-10-06T16:37:00.838060+00:00
+Command: /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/.venv/bin/python labs/01-measure/tune.py --reps 2
+Environment: threads=8 ngl=0 ctx=2048 parallel=4 port=8090
+
+
+────────────────────────────────────────────────────────────────
+  Thread sweep on gemma-4-E2B-it-UD-Q4_K_XL.gguf
+────────────────────────────────────────────────────────────────
+  cores   : 8 physical · 16 logical
+  grid    : [1, 4, 8, 16, 32]
+  metric  : tg128   ngl: 0
+  (each point runs llama-bench -- a few minutes total)
+
+   -t   1   tg128 =     6.2 tok/s
+   -t   4   tg128 =    11.9 tok/s
+   -t   8   tg128 =    12.2 tok/s
+   -t  16   tg128 =     3.3 tok/s
+   -t  32   tg128 =     1.2 tok/s
+
+# 01 - Tune: thread-count sweep
+
+Model `gemma-4-E2B-it-UD-Q4_K_XL.gguf` · host `Linux-x86_64` · llama.cpp `b10488`
+CPU: **8 physical · 16 logical** cores · `ngl=0` · metric `tg128`
+
+| threads (-t) | tg128 (tok/s) | vs best |
+|:--|--:|--:|
+| 1 | 6.2 | 51% |
+| 4 | 11.9 | 98% |
+| 8 | 12.2 | 100% |
+| 16 | 3.3 | 27% |
+| 32 | 1.2 | 10% |
+
+**Best**: `-t 8` at 12.2 tok/s
+**Slowest tested**: `-t 32` at 1.2 tok/s (10.12x spread)
+**Against the physical-core default** (`-t 8`, 12.2 tok/s): 1.00x
+
+Use this in your run:
+
+```bash
+LAB_N_THREADS=8 make bench
+```
+
+## Your explanation (required -- replace this line)
+
+_Where is the knee, and why there? If the peak sits at your physical core count
+and drops above it, say what the extra threads are competing for. If your curve
+does something else -- flat, or still climbing at 2x logical cores -- say that
+instead and reason about why. A result that contradicts the expected shape is
+worth more than one that matches it, as long as you explain it._
+
+==> Wrote benchmarks/01-tuning-tg128.md
+
+Exit code: 0

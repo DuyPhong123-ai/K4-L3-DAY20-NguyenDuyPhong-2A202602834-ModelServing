@@ -301,4 +301,9 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    # Windows redirected stdout can use cp1252, which cannot print the checklist's
+    # Unicode status marks or Vietnamese text. Keep console and captured output usable.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     sys.exit(main())

@@ -1,0 +1,9 @@
+Captured at: 2026-10-06T16:48:00.033145+00:00
+Command: /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/.venv/bin/python /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/scripts/run_evidence.py --quality-worker
+Environment: threads=8 ngl=0 ctx=2048 parallel=4 port=8090
+
+UD-Q4_K_XL: Goodput@SLO measures the actual data delivered to the user within a specific Service Level Objective (SLO), whereas raw throughput is the total volume of data processed. Goodput@SLO is often evaluated in the context of latency targets like Time to First Byte (TTFT) and Time to Process (TPOT) to ensure both speed and data delivery meet service expectations.
+UD-Q2_K_XL: Goodput@SLO measures the *effective* throughput achieved by a system under specific Service Level Objectives (SLOs), focusing on the quality and reliability of the delivered service. Raw throughput, on the other hand, is a more fundamental metric measuring the sheer volume of data processed or transferred, irrespective of service quality.
+Saved /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/benchmarks/01-quality-comparison.json
+
+Exit code: 0

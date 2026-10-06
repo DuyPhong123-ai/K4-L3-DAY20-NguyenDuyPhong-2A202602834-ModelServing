@@ -7,17 +7,29 @@ Completed requests: `UD-Q4_K_XL` 10/10 · `UD-Q2_K_XL` 10/10
 
 | Quantization | Size (GB) | Load (ms) | TTFT P50/P95 (ms) | TPOT P50/P95 (ms) | E2E P50/P95/P99 (ms) | Decode (tok/s) |
 |:--|--:|--:|--:|--:|--:|--:|
-| UD-Q4_K_XL | 2.97 | 63826 | 461 / 620 | 116.2 / 136.9 | 7682 / 9247 / 9247 | 8.6 |
-| UD-Q2_K_XL | 2.24 | 48368 | 558 / 745 | 90.5 / 99.2 | 6199 / 6889 / 6889 | 11.0 |
+| UD-Q4_K_XL | 2.97 | 53954 | 447 / 502 | 94.9 / 100.5 | 6353 / 6780 / 6780 | 10.5 |
+| UD-Q2_K_XL | 2.24 | 44838 | 484 / 568 | 64.5 / 69.6 | 4493 / 4797 / 4797 | 15.5 |
 
 - **TTFT** = prefill. Short prompts keep it small; long-context RAG is where it explodes.
 - **TPOT** = per-output-token decode cost, bounded by memory bandwidth. `decode tok/s = 1000 / TPOT_p50`.
-- `UD-Q2_K_XL` decodes **1.28x faster** than `UD-Q4_K_XL` here, for 0.73 GB less on disk.
+- `UD-Q2_K_XL` decodes **1.48x faster** than `UD-Q4_K_XL` here, for 0.73 GB less on disk.
 
 ## Your observation
 
-Trên phần cứng máy thí nghiệm (AMD Ryzen 7 7435HS 8 cores/16 threads, CPU inference):
-- **Tốc độ Decode (TPOT):** Bản `UD-Q2_K_XL` (2-bit) đạt tốc độ giải mã 11.0 tok/s so với 8.6 tok/s của `UD-Q4_K_XL` (4-bit), tăng tốc xấp xỉ **1.28x (28% speedup)**. Điều này hoàn toàn khớp với lý thuyết: giai đoạn decode của LLM có arithmetic intensity rất thấp (memory-bandwidth bound). Việc nén trọng số từ 4-bit xuống 2-bit giúp giảm 24.6% dung lượng dữ liệu cần chuyển từ RAM vào CPU cache ở mỗi token sinh ra, trực tiếp giảm TPOT từ 116.2 ms xuống 90.5 ms.
-- **Thời gian khởi động (Load Time):** Bản 2-bit nhẹ hơn 0.73 GB (2.24 GB so với 2.97 GB) nên thời gian nạp model vào RAM giảm từ 63.8s xuống 48.4s (nhanh hơn ~24%).
-- **Độ trễ TTFT (Prefill):** Giai đoạn prefill phụ thuộc nhiều hơn vào năng lực tính toán FLOPs (compute bound). TTFT của bản 2-bit cao hơn nhẹ (P50 558 ms so với 461 ms) do chi phí giải nén/dequantization trọng số 2-bit phức tạp hơn về mặt toán tử CPU.
-- **Đánh đổi chất lượng (Quantization Trade-off):** Mặc dù bản 2-bit nhanh hơn và tiết kiệm dung lượng, độ phân giải 2-bit gây suy giảm perplexity và độ chính xác ngữ nghĩa rõ rệt hơn so với bản 4-bit (UD-Q4_K_XL). Đối với mô hình phục vụ tương tác thực tế hoặc RAG, bản 4-bit mang lại sự cân bằng tối ưu giữa tốc độ (8.6 tok/s đủ cho tốc độ đọc người dùng) và độ chính xác của câu trả lời.
+Lần chạy lại CPU-only, 8 threads: UD-Q4_K_XL đạt 10.5 tok/s, UD-Q2_K_XL đạt 15.5 tok/s (tỷ lệ compare/primary 1.48×). TPOT P50 lần lượt 94.94 và 64.49 ms; bản compare nhỏ hơn 0.73 GiB. Kết quả phù hợp với giả thuyết decode chịu ảnh hưởng của lưu lượng bộ nhớ, nhưng không đo trực tiếp bandwidth hoặc chi phí dequantization. Đã thử cùng prompt ở cả hai quantization; transcript bên dưới. Một câu hỏi chưa đủ kết luận chất lượng suy giảm. Giữ 4-bit cho serving theo lựa chọn đã ghi trong REFLECTION; cần kiểm tra chất lượng trước khi đổi.
+
+## Same-prompt quality check
+
+Prompt: Explain in two sentences how goodput@SLO differs from raw throughput. Mention TTFT and TPOT targets.
+
+**UD-Q4_K_XL**
+
+> Goodput@SLO measures the actual data delivered to the user within a specific Service Level Objective (SLO), whereas raw throughput is the total volume of data processed. Goodput@SLO is often evaluated in the context of latency targets like Time to First Byte (TTFT) and Time to Process (TPOT) to ensure both speed and data delivery meet service expectations.
+
+**UD-Q2_K_XL**
+
+> Goodput@SLO measures the *effective* throughput achieved by a system under specific Service Level Objectives (SLOs), focusing on the quality and reliability of the delivered service. Raw throughput, on the other hand, is a more fundamental metric measuring the sheer volume of data processed or transferred, irrespective of service quality.
+
+Cùng temperature=0, seed=42, max_tokens=96, CPU-only, 8 threads. Một prompt chỉ là kiểm tra minh họa, không phải phép đánh giá chất lượng tổng quát. Raw request/response: `01-quality-comparison.json`.
+
+Quan sát ở prompt này: Q4 viết sai tên TTFT (Time to First Byte) và TPOT (Time to Process); trong lab, chúng là Time to First Token và Time per Output Token. Q2 không nhắc TTFT/TPOT như prompt yêu cầu. Cả hai kết thúc bình thường (`finish_reason=stop`), nên các thiếu sót này không do hết ngân sách 96 token. Một ví dụ chưa xác lập chất lượng tương đối giữa hai quantization.

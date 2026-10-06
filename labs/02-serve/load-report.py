@@ -111,8 +111,9 @@ def main() -> int:
             because = (
                 f"Throughput delivered only {rps_ratio:.2f}x for {user_ratio:.0f}x the offered "
                 f"load, and effective concurrency ({conc:.1f}) is at or above all {slots} decode "
-                f"slots. Saturation sets in somewhere at or below {u2} users; the load you added "
-                f"beyond that point became queue time rather than throughput."
+                f"slots. These are saturation signals at the tested load. Two short runs do "
+                "not locate the exact saturation threshold or separate queue time from compute "
+                "time; corroborate queueing with the server's deferred-request gauges."
             )
         elif flat_throughput:
             verdict = "**Saturated.**"
@@ -144,8 +145,10 @@ def main() -> int:
             f"within it. (This lab does not fix an SLO number for you -- pick one in your "
             f"write-up and state how much goodput you keep at it.)"
             if p95_ratio > rps_ratio else
-            f"P95 grew no faster than throughput ({p95_ratio:.2f}x vs {rps_ratio:.2f}x), so this "
-            f"server still has headroom at {u2} users."
+            f"P95 grew no faster than throughput ({p95_ratio:.2f}x vs {rps_ratio:.2f}x). "
+            "This alone does not establish spare capacity: use throughput scaling and "
+            "the server's busy-slot and deferred-request gauges to assess saturation. "
+            "Completed-request percentiles in a short run can omit requests still queued."
         )
 
         analysis = f"""

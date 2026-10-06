@@ -1,0 +1,33 @@
+<!doctype html><meta charset="utf-8"><title>Lab run evidence</title><style>body{margin:24px;background:#101827;color:#e5e7eb;font:15px monospace}h1{font:22px sans-serif}p{font:15px sans-serif;color:#a5d6ff}pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.45;border:1px solid #475569;padding:18px}</style><h1>03-serve-and-smoke</h1><p>Actual command log · local WSL2 · browser evidence viewer (not a terminal screenshot)</p><p>Source: submission/logs/03-serve-and-smoke.txt</p><pre>Command: /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/runtime/b10488/llama-b10488/llama-server -m /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/models/gemma-4-E2B-it-UD-Q4_K_XL.gguf --host 127.0.0.1 --port 8090 -t 8 -ngl 0 --ctx-size 2048 --parallel 4 --cont-batching --metrics --reasoning off
+0.53.901.299 I srv  llama_server: listening on http://127.0.0.1:8090
+0.51.189.469 I srv  llama_server: listening on http://127.0.0.1:8090
+1.02.699.494 I srv  llama_server: listening on http://127.0.0.1:8090
+
+Captured at: 2026-10-06T16:32:20.946138+00:00
+Command: /mnt/c/Users/ASUS/Documents/LAB-20KAI/K4-L3-DAY20-NguyenDuyPhong-2A202602834-ModelServing/.venv/bin/python labs/02-serve/smoke-test.py
+Environment: threads=8 ngl=0 ctx=2048 parallel=4 port=8090
+
+
+────────────────────────────────────────────────────────────────
+  Smoke test against http://localhost:8090
+────────────────────────────────────────────────────────────────
+  /metrics before : tokens_predicted_total = 0
+
+==&gt; POST http://localhost:8090/v1/chat/completions
+
+Goodput@SLO measures the amount of work completed within a specified Service Level Objective (SLO) timeframe.
+
+  server timings: prompt 35 tok in 544 ms  -&gt;  64.3 tok/s prefill
+                  decode 24 tok in 1937 ms  -&gt;  11.9 tok/s
+
+==&gt; GET http://localhost:8090/metrics   (rubric item 7 -- screenshot this)
+   llamacpp:tokens_predicted_total                   24.00   (+24)
+   llamacpp:prompt_tokens_total                      35.00   (+35)
+   llamacpp:n_decode_total                           26.00   (+26)
+   llamacpp:requests_processing                       0.00
+   llamacpp:n_busy_slots_per_decode                   1.00   (+1)
+
+OK -- served a completion and tokens_predicted_total is 24 (non-zero).
+
+Exit code: 0
+</pre>

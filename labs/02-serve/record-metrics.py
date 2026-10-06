@@ -137,7 +137,7 @@ Highest sampled value was **{busy_peak:.2f} of {slots}** slots. Note this gauge 
 requests were served one at a time -- either the load was too light to overlap, or
 they arrived too far apart. A peak approaching `--parallel` means the scheduler was
 genuinely packing concurrent requests into shared decode steps.
-{"`requests_deferred` went above zero: more requests arrived than there were slots, so some waited. That wait is the queue time in your P95." if peak("llamacpp:requests_deferred") > 0 else "`requests_deferred` stayed at zero: every request found a free slot on arrival."}
+{"`requests_deferred` went above zero: some requests queued for a slot. These samples do not isolate how much queue time contributed to P95." if peak("llamacpp:requests_deferred") > 0 else "`requests_deferred` stayed at zero: no queued requests were observed at the sample times."}
 
 ## Your observation (required -- replace this line)
 
