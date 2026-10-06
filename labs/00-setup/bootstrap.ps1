@@ -1,4 +1,4 @@
-# Windows bootstrap: virtualenv + deps, then hand off to the cross-platform setup.py.
+﻿# Windows bootstrap: virtualenv + deps, then hand off to the cross-platform setup.py.
 # Works in both Windows PowerShell 5.1 (powershell.exe) and PowerShell 7+ (pwsh):
 #   powershell -ExecutionPolicy Bypass -File labs\00-setup\bootstrap.ps1
 #   pwsh       -ExecutionPolicy Bypass -File labs\00-setup\bootstrap.ps1
